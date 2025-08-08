@@ -4,13 +4,13 @@ Between December 2022 and July 2024, the English National Health Service saw 27 
 The analysis has been summarised in a manuscript that will be submitted to a academic journal  for consideration and review.
 
 The repository contains a series of R code files.  Each R file have a numnerical prefix indicating the stage of the analysis:
-1  data preparation
-2  data checks
-3  creating analysis dataframes
-4  main analysis
-5  sensistivity analysis
-6  Additional materials for the manuscript
-7  other outputs not used in the manuscript
-9  preliminary and exploratory scripts
+(1)  data preparation,
+(2)  data checks,
+(3)  creating analysis dataframes,
+(4)  main analysis,
+(5)  sensistivity analysis,
+(6)  additional materials for the manuscript,
+(7)  other outputs not used in the manuscript,
+(9)  preliminary and exploratory scripts.
 
 Some of the R files must be run within the National Commissioning Data Repoistiry (NCDR)  data science server.  These have the suffix "(ncdr)".
