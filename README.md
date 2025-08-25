@@ -13,4 +13,4 @@ This repository contains a series of R code files.  Each R file has a numnerical
 (7)  other outputs not used in the manuscript,
 (9)  preliminary and exploratory scripts.
 
-Some of the R files must be run within the National Commissioning Data Repoistiry (NCDR)  data science server.  These have the suffix "(ncdr)".
+Some of the R files must be run within the National Commissioning Data Repoistiry (NCDR)  data science server or the Unified Data Access layer (UDAL).  These have the suffix "(ncdr)" or "(udal)".
