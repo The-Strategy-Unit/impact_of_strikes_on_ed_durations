@@ -50,6 +50,11 @@ unmediated_model_coefs <-
   mutate(sig95 = if_else(p.value <= 0.05, 1, 0)) %>% 
   mutate(lcl95 = estimate + qnorm(0.025) * std.error,
          ucl95 = estimate + qnorm(0.975) * std.error) %>% 
+  mutate(sig95dir = case_when(sig95 == 0 ~ "not_sig",
+                              ucl95 < 0 ~ "sig_low",
+                              TRUE ~ "sig_high")) |> 
+  mutate(sig95dir = factor(sig95dir, 
+                           levels = c("not_sig", "sig_low", "sig_high"))) |> 
   filter(term %in% c("nurses_strike",
                      "paramedics_strike",
                      "jr_docs_and_cons_strike",
@@ -85,12 +90,15 @@ unmediated_model_coefs %>%
   geom_vline(aes(xintercept = 0), colour = "grey") +
   geom_segment(aes(x = lcl95_p_change_duration, xend = ucl95_p_change_duration,
                    y = term_label, yend = term_label, 
-                   colour = as.factor(sig95))) +
-  geom_point(aes(x = expected_p_change_duration, y = term_label, colour = as.factor(sig95))) +
+                   colour = sig95dir)) +
+  geom_point(aes(x = expected_p_change_duration, 
+                 y = term_label, 
+                 colour = sig95dir),
+             shape = 21) +
   scale_x_continuous(name = "% change in ED duration",
                      label = percent_format(accuracy = 1)) +
   scale_y_discrete(name = "") +
-  scale_colour_manual(values = c("grey", "blue")) +
+  scale_colour_manual(values = c("grey", "orange", "blue")) +
   labs(title = "Estimated % change in ED durations on days affected by Industrial Action",
        subtitle = "England | December 2022 - July 2024",
        caption = "derived from unmediated model coeficients") +
@@ -110,12 +118,15 @@ unmediated_model_coefs %>%
   geom_vline(aes(xintercept = 0), colour = "grey") +
   geom_segment(aes(x = lcl95_p_change_duration, xend = ucl95_p_change_duration,
                    y = term_label, yend = term_label, 
-                   colour = as.factor(sig95))) +
-  geom_point(aes(x = expected_p_change_duration, y = term_label, colour = as.factor(sig95))) +
+                   colour = sig95dir)) +
+  geom_point(aes(x = expected_p_change_duration, 
+                 y = term_label, 
+                 colour = sig95dir),
+             shape = 21) +
   scale_x_continuous(name = "% change in ED duration",
                      label = percent_format(accuracy = 1)) +
   scale_y_discrete(name = "") +
-  scale_colour_manual(values = c("grey", "blue")) +
+  scale_colour_manual(values = c("grey", "orange", "blue")) +
   labs(#title = "Estimated % change in ED durations on days affected by Industrial Action",
        #subtitle = "England | December 2022 - July 2024",
        caption = "whiskers indicate 95% confidence intervals") +
@@ -817,7 +828,8 @@ mediation_results_df |>
                      y = mediator_label, yend = mediator_label,
                    colour = dir_sig95)) +
   geom_point(aes(x = pred_coef_med_model, y = mediator_label,
-                 colour = dir_sig95)) +
+                 colour = dir_sig95),
+             shape = 21) +
   facet_grid(cols = vars(exposure_label),
              rows = vars(hypothesis_label),
              scales = "free_y",
@@ -956,7 +968,8 @@ mediation_results_df |>
                    y = mediator_label, yend = mediator_label,
                    colour = dir_sig95)) +
   geom_point(aes(x = std_expected_p_change_duration, y = mediator_label,
-                 colour = dir_sig95)) +
+                 colour = dir_sig95),
+             shape = 21) +
   facet_grid(rows = vars(hypothesis_label),
              scales = "free_y",
              space = "free_y",
@@ -1167,7 +1180,8 @@ mins_mediated_by_mediator |>
                    y = mediator_label, yend = mediator_label,
                    colour = dir_sig95)) +
   geom_point(aes(x = mins_mediated, y = mediator_label,
-                 colour = dir_sig95)) +
+                 colour = dir_sig95),
+             shape = 21) +
   facet_grid(cols = vars(exposure_label, exposure_label2),
              rows = vars(hypothesis_label),
              scales = "free_y",
@@ -1183,7 +1197,7 @@ mins_mediated_by_mediator |>
         plot.caption = element_text(face = "italic"))
 
 
-ggsave(filename = here("manuscript", "figure_4_v2.jpg"),
+ggsave(filename = here("manuscript", "figure_s2.jpg"),
        device = "jpg",
        dpi = 300,
        units = "cm",
